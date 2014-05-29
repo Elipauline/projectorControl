@@ -108,13 +108,13 @@ public class cmdProjectorControl {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		String action = args[0];
-		String ip = args[1];
-		int timeout = Integer.parseInt(args[2]);
-		
 		// test arguments
 		new cmdProjectorControl().testArguments(args);
 		
+		String action = args[0];
+		String ip = args[1];
+		int timeout = Integer.parseInt(args[2]);
+				
 		// handle command
 		System.out.println(new cmdProjectorControl().handleCommand(action, ip, timeout));
 		
