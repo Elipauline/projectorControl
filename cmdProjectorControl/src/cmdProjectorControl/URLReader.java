@@ -52,14 +52,19 @@ public class URLReader {
         in.close();
     }
     
-	public String Reader(String site) {
+	public String Reader(String site, int timeout) {
 		  
 		try {
 		
+			// instantiate a new URL object
 	        URL siteURL = new URL(site);
-	        BufferedReader in = new BufferedReader(
-	        new InputStreamReader(siteURL.openStream()));
-
+	        // open a connection to the URL
+	        URLConnection conn = siteURL.openConnection();
+	        // set the connection timeout value (throws java.net.SocketTimeoutException)
+	        conn.setReadTimeout(timeout);
+	  	        
+	        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	        	        
 	        String inputLine;
 	        String response = "";
 	        while ((inputLine = in.readLine()) != null)
@@ -75,6 +80,9 @@ public class URLReader {
 		      System.out.println("Connection Failed");
 		      System.exit(1);
 		  
+		} catch (java.net.SocketTimeoutException e) {
+			  System.out.println("Connection Timeout");
+			  System.exit(1);
 		      
 		} catch (Exception e) {
 			System.out.println(e.toString());

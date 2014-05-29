@@ -25,6 +25,10 @@ package cmdProjectorControl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is used to send limited actions to a Dell 1610HD projector from the command line.
+ * 
+ */
 public class cmdProjectorControl {
 
 	String validActions = "(?i)on|off|status";
@@ -43,9 +47,9 @@ public class cmdProjectorControl {
     }
 	
 	private void printSyntax(String error) {
-		System.out.println("cmdProjectControl Syntax: [action] [ip_address]\n\nPossible Actions: on, off, status\n\n"
-				+ "Examples:\n\njava -jar cmdProjectorControl.jar on 192.168.2.20\njava -jar cmdProjectorControl.jar "
-				+ "off 192.168.2.20\njava -jar cmdProjectorControl.jar status 192.168.2.20");
+		System.out.println("cmdProjectControl Syntax: [action] [ip_address] [timeout_value_milliseconds]\n\nPossible Actions: on, off, status\n\n"
+				+ "Examples:\n\njava -jar cmdProjectorControl.jar on 192.168.2.20 15000\njava -jar cmdProjectorControl.jar "
+				+ "off 192.168.2.20 15000\njava -jar cmdProjectorControl.jar status 192.168.2.20 15000");
 		
 		System.out.println("\nError: " + error);
 		
@@ -56,7 +60,7 @@ public class cmdProjectorControl {
 	private void testArguments(String[] args) {
 		
 		// test number of arguments
-		if (args.length != 2)
+		if (args.length != 3)
 			printSyntax("Invalid Number of Arguments");
 			
 		// test for valid actions
@@ -67,27 +71,30 @@ public class cmdProjectorControl {
 		if (!checkString(args[1]))
 			printSyntax("Invalid IP Address");
 		
+		// test for timeout value
+		if (Integer.parseInt(args[2]) < 0)
+			printSyntax("Invalid Timeout Value (Required: Integer >= 0)");
 						
 	}
 	
-	private String handleCommand(String action, String ip) {
+	private String handleCommand(String action, String ip, int timeout) {
 		
 		if (action.matches("(?i)on")) {
 			//System.out.println("ON");
 			ProjectorAction pAction = new ProjectorAction();
-			pAction.turnOn(ip);
-			return pAction.getStatus(ip);
+			pAction.turnOn(ip, timeout);
+			return pAction.getStatus(ip, timeout);
 			
 		} else if (action.matches("(?i)off")) {
 			//System.out.println("OFF");
 			ProjectorAction pAction = new ProjectorAction();
-			pAction.turnOff(ip);
-			return pAction.getStatus(ip);
+			pAction.turnOff(ip, timeout);
+			return pAction.getStatus(ip, timeout);
 			
 		} else if (action.matches("(?i)status")) {
 			//System.out.println("STATUS");
 			ProjectorAction pAction = new ProjectorAction();
-			return pAction.getStatus(ip);
+			return pAction.getStatus(ip, timeout);
 			
 		} else {
 			
@@ -101,13 +108,15 @@ public class cmdProjectorControl {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		String action = args[0];
+		String ip = args[1];
+		int timeout = Integer.parseInt(args[2]);
+		
 		// test arguments
 		new cmdProjectorControl().testArguments(args);
 		
 		// handle command
-		System.out.println(new cmdProjectorControl().handleCommand(args[0], args[1]));
-		
-			
+		System.out.println(new cmdProjectorControl().handleCommand(action, ip, timeout));
 		
 	}
 

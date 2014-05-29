@@ -24,13 +24,13 @@ package cmdProjectorControl;
 
 public class ProjectorAction {
 		
-		protected String turnOn(String ipAddress) {
+		protected String turnOn(String ipAddress, int timeout) {
 			
 			String response;
 			
 			// Power On
 			URLReader URLReaderRequest = new URLReader();
-			response = URLReaderRequest.Reader("http://" + ipAddress + "/tgi/status.tgi?PowerOn=Power+ON+");
+			response = URLReaderRequest.Reader("http://" + ipAddress + "/tgi/status.tgi?PowerOn=Power+ON+", timeout);
 				
 			try {
 				Thread.sleep(10000);
@@ -43,13 +43,13 @@ public class ProjectorAction {
 			
 		}
 		
-		protected String turnOff(String ipAddress) {
+		protected String turnOff(String ipAddress, int timeout) {
 			
 			String response;
 
 			// Power Off
 			URLReader URLReaderRequest = new URLReader();
-			response = URLReaderRequest.Reader("http://" + ipAddress + "/tgi/status.tgi?PowerOff=Power+OFF+");
+			response = URLReaderRequest.Reader("http://" + ipAddress + "/tgi/status.tgi?PowerOff=Power+OFF+", timeout);
 			
 			try {
 				Thread.sleep(10000);
@@ -63,13 +63,13 @@ public class ProjectorAction {
 			
 		}
 		
-		protected String getStatus(String ipAddress) {
+		protected String getStatus(String ipAddress, int timeout) {
 			
 			String response;
 			
 			// Power On
 			URLReader URLReaderRequest = new URLReader();
-			response = URLReaderRequest.Reader("http://" + ipAddress + "/status.htm");
+			response = URLReaderRequest.Reader("http://" + ipAddress + "/status.htm", timeout);
 			
 			// parse HTML input
 			String[] splitInput = response.split("TYPE=\"text\" VALUE=");
