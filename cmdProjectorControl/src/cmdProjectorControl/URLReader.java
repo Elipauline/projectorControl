@@ -76,16 +76,20 @@ public class URLReader {
 	        
 		    return response;
 
-		} catch (java.net.ConnectException e) {
-		      System.out.println("Connection Failed");
-		      System.exit(1);
-		  
 		} catch (java.net.SocketTimeoutException e) {
 			  System.out.println("Connection Timeout");
 			  System.exit(1);
+		    
+		} catch (java.net.ConnectException e) {
+		      System.out.println("Connection Failed");
+		      System.exit(1);
+		    
+		} catch (java.io.FileNotFoundException e) {
+			  System.out.println("Status Page Not Found - Please check the IP address.");
+			  System.exit(1);
 		      
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			System.out.println("Exception: " + e.toString());
 		    System.exit(1);
 		 
 		} 
