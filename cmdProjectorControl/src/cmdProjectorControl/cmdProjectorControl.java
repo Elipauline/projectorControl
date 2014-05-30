@@ -47,9 +47,9 @@ public class cmdProjectorControl {
     }
 	
 	private void printSyntax(String error) {
-		System.out.println("cmdProjectControl Syntax: [action] [ip_address] [timeout_value_milliseconds]\n\nPossible Actions: on, off, status\n\n"
-				+ "Examples:\n\njava -jar cmdProjectorControl.jar on 192.168.2.20 15000\njava -jar cmdProjectorControl.jar "
-				+ "off 192.168.2.20 15000\njava -jar cmdProjectorControl.jar status 192.168.2.20 15000");
+		System.out.println("cmdProjectControl Syntax: [action] [ip_address] [optional_timeout_value_seconds]\n\nPossible Actions: on, off, status\n\n"
+				+ "Examples:\n\njava -jar cmdProjectorControl.jar on 192.168.2.20\njava -jar cmdProjectorControl.jar "
+				+ "off 192.168.2.20 15\njava -jar cmdProjectorControl.jar status 192.168.2.20");
 		
 		System.out.println("\nError: " + error);
 		
@@ -60,7 +60,7 @@ public class cmdProjectorControl {
 	private void testArguments(String[] args) {
 		
 		// test number of arguments
-		if (args.length != 3)
+		if (args.length <= 1 && args.length >= 4)
 			printSyntax("Invalid Number of Arguments");
 			
 		// test for valid actions
@@ -71,11 +71,13 @@ public class cmdProjectorControl {
 		if (!checkString(args[1]))
 			printSyntax("Invalid IP Address");
 		
-		// test for timeout value
-		if (Integer.parseInt(args[2]) < 0)
-			printSyntax("Invalid Timeout Value (Required: Integer >= 0)");
-						
-	}
+		// test for timeout value (if present)
+		if (args.length == 3) {
+			if (Integer.parseInt(args[2]) <= 0 || Integer.parseInt(args[2]) > 120)
+				printSyntax("Invalid Timeout Value (Required: 1-120)");
+		}
+					
+	} // end of testArguments
 	
 	private String handleCommand(String action, String ip, int timeout) {
 		
@@ -113,7 +115,12 @@ public class cmdProjectorControl {
 		
 		String action = args[0];
 		String ip = args[1];
-		int timeout = Integer.parseInt(args[2]);
+		
+		// define a default timeout value
+		int timeout = 15000;
+		
+		if (args.length == 3)
+			timeout = Integer.parseInt(args[2]) * 1000;
 				
 		// handle command
 		System.out.println(new cmdProjectorControl().handleCommand(action, ip, timeout));
