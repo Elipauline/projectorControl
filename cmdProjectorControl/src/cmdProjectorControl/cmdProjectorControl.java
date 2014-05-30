@@ -32,7 +32,8 @@ import java.util.regex.Pattern;
 public class cmdProjectorControl {
 
 	String validActions = "(?i)on|off|status";
-	
+	double version = 0.3;
+		
 	/** IP address regular expression checker obtained from:
 	 * https://community.oracle.com/thread/1357517?tstart=18675
 	 * 
@@ -48,8 +49,8 @@ public class cmdProjectorControl {
 	
 	private void printSyntax(String error) {
 		System.out.println("cmdProjectControl Syntax: [action] [ip_address] [optional_timeout_value_seconds]\n\nPossible Actions: on, off, status\n\n"
-				+ "Examples:\n\njava -jar cmdProjectorControl.jar on 192.168.2.20\njava -jar cmdProjectorControl.jar "
-				+ "off 192.168.2.20 15\njava -jar cmdProjectorControl.jar status 192.168.2.20");
+				+ "Examples:\n\njava -jar cmdProjectorControl-" + version + ".jar on 192.168.2.20\njava -jar cmdProjectorControl-" + version + ".jar "
+				+ "off 192.168.2.20 15\njava -jar cmdProjectorControl-" + version + ".jar status 192.168.2.20");
 		
 		System.out.println("\nError: " + error);
 		
