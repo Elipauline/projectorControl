@@ -71,15 +71,25 @@ public class ProjectorAction {
 			URLReader URLReaderRequest = new URLReader();
 			response = URLReaderRequest.Reader("http://" + ipAddress + "/status.htm", timeout);
 			
-			// parse HTML input
-			String[] splitInput = response.split("TYPE=\"text\" VALUE=");
+			try {
 			
-			// parse remaining input for status
-			String[] splitStatus = splitInput[1].split("\"");
+				// parse HTML input
+				String[] splitInput = response.split("TYPE=\"text\" VALUE=");
 			
-			String status = splitStatus[1].replaceFirst(" *$", "");
+				// parse remaining input for status
+				String[] splitStatus = splitInput[1].split("\"");
 			
-			return status;
+				String status = splitStatus[1].replaceFirst(" *$", "");
+				
+				return status;
+				
+			} catch (Exception e) {
+				
+				System.err.println("Error while parsing status.");
+				
+			}
+			
+			return null;
 			
 		}
 		
